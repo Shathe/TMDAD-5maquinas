@@ -1,0 +1,106 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html  xmlns:th="http://www.thymeleaf.org">
+      
+<head>
+    <title>Cliente MVC Twitter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta
+            content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no"
+            id="Viewport" name="viewport"/>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" media="screen"
+          href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.1/css/bootstrap.min.css}"/>
+    <!-- Optional theme -->
+    <link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+	
+    <link rel="stylesheet"
+          href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"
+          th:href="@{/webjars/bootstrap/3.3.1/css/bootstrap-theme.min.css}"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"
+            th:src="@{/webjars/jquery/2.1.3/jquery.min.js}"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"
+            th:src="@{/webjars/bootstrap/3.3.1/js/bootstrap.min.js}"></script>
+    <script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+	<script src="stomp.js"></script>
+    <script th:src="@{/functions.js}" src="../static/functions.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl as controlador">
+
+<nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <p class="navbar-brand">Cliente MVC Twitter</p>
+        <p class="navbar-text">Desarrollo de Aplicaciones Distribuidas
+            2016-2017</p>
+    </div>
+    <div class="nav navbar-right">
+        <a title="UNIZAR" href="http://www.unizar.es"><img height="50"
+                                                           th:src="@{/logoUZ.png}" src="../static/logoUZ.png"
+                                                           alt=""/></a>
+    </div>
+</nav>
+<div class="container" ng-show="!authenticated">
+	Login with: <a href="/login">Facebook</a>
+</div>
+<div class="container" ng-show="authenticated">
+	Logged in as: <span ng-bind="user"></span>
+	  <div>
+    <button ng-click="controlador.logout()" class="btn btn-primary">Logout</button>
+  </div>
+</div>
+
+<div class="container">
+    <!-- Formulario principal -->
+    <form id="search" ng-submit="controlador.getTweets()">
+        <div class="row">
+            <input type="text" class="form-control" id="q" name="q"
+                   placeholder="Escribe algo que quieras buscar"/>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <input type="submit" class="btn btn-default center-block" value="Buscar"></input>
+        </div>
+          <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+        <div class="row">
+        	<select id="dificultad">
+			    <option value="facil">facil</option>
+			    <option value="medio">medio</option>
+			    <option value="dificil">dificil</option>
+			  </select>
+			  <select id="restriccion">
+			    <option value="poco restrictivo">poco restrictivo</option>
+			    <option value="normal" >normal</option>
+			    <option value="muy restrictivo">muy restrictivo</option>
+			  </select>
+			  <input type="checkbox" name="histor" id="pista" value="history"></input> Show HINT
+			  <input type="checkbox" name="histor" id="history" value="history"></input> Show HISTORY
+        </div>
+        
+	          
+    </form>
+    <div class="row">&nbsp;</div>
+    
+<div ng-repeat="tweet in tweets" class="row panel panel-default" th:fragment="content" >
+    <div class="panel-heading">
+        <a href="https://twiter.com/{{tweet.fromUser}}"
+           target="_blank"><b >{{tweet.fromUser}}</b></a>
+        <div class="pull-right">
+            <a href="https://twiter.com/{{tweet.fromUser}}/status/{{tweet.idStr}}"
+               target="_blank"><span class="glyphicon glyphicon-link"></span></a>
+        </div>
+    </div>
+    <div class="panel-body" >{{tweet.unmodifiedText}}   </div>
+</div>
+</div>
+</body>
+</html>
